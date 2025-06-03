@@ -2,6 +2,7 @@
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { signUp } from '@/actions/signUp'
 import { Button } from '@/components/ui/button'
@@ -35,10 +36,10 @@ export function SignUpForm() {
   })
 
   const handleRegister = async (data: RegisterFormType) => {
-    try {
-      await signUp(data)
-    } catch (error) {
-      console.log({ error })
+    const error = await signUp(data)
+
+    if (error?.message) {
+      return toast.error(error.message)
     }
   }
 

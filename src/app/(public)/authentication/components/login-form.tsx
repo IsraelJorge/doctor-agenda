@@ -2,7 +2,9 @@
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
+import { signIn } from '@/actions/signIn'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -32,8 +34,12 @@ export function LoginForm() {
     },
   })
 
-  const handleLogin = (data: LoginFormType) => {
-    console.log(data)
+  const handleLogin = async (data: LoginFormType) => {
+    const error = await signIn(data)
+
+    if (error?.message) {
+      return toast.error(error.message)
+    }
   }
 
   return (
@@ -77,7 +83,12 @@ export function LoginForm() {
             />
           </CardContent>
           <CardFooter>
-            <Button className="w-full" type="submit">
+            <Button
+              className="w-full"
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              isLoading={form.formState.isSubmitting}
+            >
               Entrar
             </Button>
           </CardFooter>

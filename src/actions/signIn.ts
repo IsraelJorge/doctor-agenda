@@ -4,21 +4,18 @@ import { APIError } from 'better-auth/api'
 
 import { auth } from '@/lib/auth'
 
-type SignUpData = {
-  name: string
+type SignInData = {
   email: string
   password: string
 }
 
-export async function signUp(data: SignUpData) {
+export const signIn = async (data: SignInData) => {
   try {
-    await auth.api.signUpEmail({
+    await auth.api.signInEmail({
       body: {
-        name: data.name,
         email: data.email,
         password: data.password,
       },
-      asResponse: true,
     })
   } catch (error) {
     if (error instanceof APIError) {
