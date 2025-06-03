@@ -3,6 +3,7 @@
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { useForm } from 'react-hook-form'
 
+import { signUp } from '@/actions/signUp'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -33,8 +34,12 @@ export function SignUpForm() {
     },
   })
 
-  const handleRegister = (data: RegisterFormType) => {
-    console.log(data)
+  const handleRegister = async (data: RegisterFormType) => {
+    try {
+      await signUp(data)
+    } catch (error) {
+      console.log({ error })
+    }
   }
 
   return (
@@ -91,7 +96,12 @@ export function SignUpForm() {
             />
           </CardContent>
           <CardFooter>
-            <Button className="w-full" type="submit">
+            <Button
+              className="w-full"
+              type="submit"
+              disabled={form.formState.isSubmitting}
+              isLoading={form.formState.isSubmitting}
+            >
               Criar conta
             </Button>
           </CardFooter>

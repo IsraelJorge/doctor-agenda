@@ -1,5 +1,7 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { nextCookies } from 'better-auth/next-js'
+import { headers } from 'next/headers'
 
 import { db } from '@/database'
 import * as schemas from '@/database/schemas'
@@ -9,6 +11,10 @@ export const auth = betterAuth({
     provider: 'pg',
     schema: schemas,
   }),
+  emailAndPassword: {
+    enabled: true,
+  },
+  plugins: [nextCookies()],
   user: {
     modelName: 'userTable',
   },
@@ -22,3 +28,11 @@ export const auth = betterAuth({
     modelName: 'verificationTable',
   },
 })
+
+export const getUserSession = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  return session
+}
