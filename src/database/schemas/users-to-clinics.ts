@@ -1,11 +1,11 @@
 import { relations } from 'drizzle-orm'
-import { pgTable, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
 import { clinicTable } from './clinic'
 import { userTable } from './user'
 
 export const usersToClinicsTable = pgTable('users_to_clinics', {
-  userId: uuid('user_id')
+  userId: text('user_id')
     .notNull()
     .references(() => userTable.id, { onDelete: 'cascade' }),
   clinicId: uuid('clinic_id')
