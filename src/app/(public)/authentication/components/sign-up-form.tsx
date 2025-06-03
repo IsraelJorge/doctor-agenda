@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { signUp } from '@/actions/signUp'
+import { signUp } from '@/actions/sign-up'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -24,12 +24,15 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { RegisterFormSchema, RegisterFormType } from '@/data/schemas/register'
+import {
+  SignUpForm as SignUpFormType,
+  SignUpFormSchema,
+} from '@/data/schemas/sign-up'
 import { Route } from '@/utils/routes'
 
 export function SignUpForm() {
-  const form = useForm<RegisterFormType>({
-    resolver: standardSchemaResolver(RegisterFormSchema),
+  const form = useForm<SignUpFormType>({
+    resolver: standardSchemaResolver(SignUpFormSchema),
     defaultValues: {
       name: '',
       email: '',
@@ -39,7 +42,7 @@ export function SignUpForm() {
 
   const router = useRouter()
 
-  const handleRegister = async (data: RegisterFormType) => {
+  const handleRegister = async (data: SignUpFormType) => {
     const error = await signUp(data)
 
     if (error?.message) {

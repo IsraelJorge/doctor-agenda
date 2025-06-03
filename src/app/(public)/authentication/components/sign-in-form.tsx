@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { signIn } from '@/actions/signIn'
+import { signIn } from '@/actions/sign-in'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -24,12 +24,15 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { LoginFormSchema, LoginFormType } from '@/data/schemas/login'
+import {
+  SignInForm as LoginFormType,
+  SignInFormSchema,
+} from '@/data/schemas/sign-in'
 import { Route } from '@/utils/routes'
 
-export function LoginForm() {
+export function SignInForm() {
   const form = useForm<LoginFormType>({
-    resolver: standardSchemaResolver(LoginFormSchema),
+    resolver: standardSchemaResolver(SignInFormSchema),
     defaultValues: {
       email: '',
       password: '',
