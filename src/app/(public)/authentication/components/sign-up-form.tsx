@@ -1,6 +1,7 @@
 'use client'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -24,6 +25,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RegisterFormSchema, RegisterFormType } from '@/data/schemas/register'
+import { Route } from '@/utils/routes'
 
 export function SignUpForm() {
   const form = useForm<RegisterFormType>({
@@ -35,12 +37,16 @@ export function SignUpForm() {
     },
   })
 
+  const router = useRouter()
+
   const handleRegister = async (data: RegisterFormType) => {
     const error = await signUp(data)
 
     if (error?.message) {
       return toast.error(error.message)
     }
+
+    router.push(Route.dashboard)
   }
 
   return (

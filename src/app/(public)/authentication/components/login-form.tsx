@@ -1,6 +1,7 @@
 'use client'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -24,6 +25,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoginFormSchema, LoginFormType } from '@/data/schemas/login'
+import { Route } from '@/utils/routes'
 
 export function LoginForm() {
   const form = useForm<LoginFormType>({
@@ -34,12 +36,16 @@ export function LoginForm() {
     },
   })
 
+  const router = useRouter()
+
   const handleLogin = async (data: LoginFormType) => {
     const error = await signIn(data)
 
-    if (error?.message) {
+    if (error) {
       return toast.error(error.message)
     }
+
+    router.push(Route.dashboard)
   }
 
   return (
