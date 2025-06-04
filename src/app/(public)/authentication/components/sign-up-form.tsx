@@ -42,7 +42,7 @@ export function SignUpForm() {
 
   const router = useRouter()
 
-  const handleRegister = async (data: SignUpFormType) => {
+  const handleSignUp = async (data: SignUpFormType) => {
     const error = await signUp(data)
 
     if (error?.message) {
@@ -54,7 +54,7 @@ export function SignUpForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleRegister)}>
+      <form onSubmit={form.handleSubmit(handleSignUp)}>
         <Card>
           <CardHeader>
             <CardTitle>Criar conta</CardTitle>
