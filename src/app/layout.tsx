@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Doutor Agenda',
+  icons: '/logo-icon.svg',
 }
 
 export default function RootLayout({

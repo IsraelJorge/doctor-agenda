@@ -6,8 +6,6 @@ import { usersToClinicsTable } from '@/database/schemas'
 import { getUserSession } from '@/lib/auth'
 import { Route } from '@/utils/routes'
 
-import { ButtonSignOut } from './components/button-sign-out'
-
 export default async function DashboardPage() {
   const session = await getUserSession()
 
@@ -20,7 +18,6 @@ export default async function DashboardPage() {
   return (
     <div>
       <h1>Dashboard</h1>
-      <ButtonSignOut />
     </div>
   )
 }
