@@ -5,7 +5,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { getUserSession } from '@/lib/auth'
 import { Route } from '@/utils/routes'
 
-import { AppSidebar } from './components/app-sidebar'
+import { AppSidebar } from './_components/app-sidebar'
 
 export default async function AuthenticatedLayout({
   children,

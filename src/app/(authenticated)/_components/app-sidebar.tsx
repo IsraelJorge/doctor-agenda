@@ -81,6 +81,7 @@ export async function AppSidebar() {
               avatar: session.user.image ?? '',
               name: session.user.name,
               email: session.user.email,
+              clinicName: session.user.clinic.name,
             }}
           />
         )}

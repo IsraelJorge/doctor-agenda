@@ -1,6 +1,8 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { nextCookies } from 'better-auth/next-js'
+import { customSession } from 'better-auth/plugins'
+import { eq } from 'drizzle-orm'
 import { headers } from 'next/headers'
 
 import { db } from '@/database'
@@ -10,6 +12,7 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: 'pg',
     schema: schemas,
+    usePlural: true,
   }),
   emailAndPassword: {
     enabled: true,
@@ -20,7 +23,26 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
-  plugins: [nextCookies()],
+  plugins: [
+    nextCookies(),
+    customSession(async ({ session, user }) => {
+      const [clinic] = await db.query.usersToClinicsTable.findMany({
+        where: eq(schemas.usersToClinicsTable.userId, user.id),
+        with: {
+          clinic: true,
+        },
+      })
+      return {
+        ...session,
+        user: {
+          ...user,
+          clinic: {
+            ...clinic.clinic,
+          },
+        },
+      }
+    }),
+  ],
   user: {
     modelName: 'userTable',
   },
