@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import { LoginForm } from './components/login-form'
+import { SignInForm } from './components/sign-in-form'
 import { SignUpForm } from './components/sign-up-form'
 
 export default function AuthenticationPage() {
@@ -12,7 +12,7 @@ export default function AuthenticationPage() {
           <TabsTrigger value="register">Criar conta</TabsTrigger>
         </TabsList>
         <TabsContent value="login">
-          <LoginForm />
+          <SignInForm />
         </TabsContent>
         <TabsContent value="register">
           <SignUpForm />
