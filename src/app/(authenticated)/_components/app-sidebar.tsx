@@ -1,11 +1,4 @@
-import {
-  CalendarDays,
-  LayoutDashboard,
-  Stethoscope,
-  UsersRound,
-} from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 
 import {
   Sidebar,
@@ -15,35 +8,33 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { getUserSession } from '@/lib/auth'
 import { Route } from '@/utils/routes'
 
+import { AppSidebarManuItem, AppSidebarMenuList } from './app-sidebar-menu-list'
 import { NavUser } from './nav-user'
 
-const items = [
+const items: AppSidebarManuItem[] = [
   {
     title: 'Dashboard',
     url: Route.dashboard,
-    icon: LayoutDashboard,
+    icon: 'layout-dashboard',
   },
   {
     title: 'Agendamentos',
     url: Route.appointment,
-    icon: CalendarDays,
+    icon: 'calendar-days',
   },
   {
     title: 'Médicos',
     url: Route.doctor,
-    icon: Stethoscope,
+    icon: 'stethoscope',
   },
   {
     title: 'Pacientes',
     url: Route.patient,
-    icon: UsersRound,
+    icon: 'users-round',
   },
 ]
 
@@ -59,18 +50,7 @@ export async function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            <AppSidebarMenuList items={items} />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

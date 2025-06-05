@@ -1,7 +1,7 @@
 import { DynamicIcon, IconName } from 'lucide-react/dynamic'
 import { ComponentProps } from 'react'
 
-type IconProps = ComponentProps<'svg'> & {
+export type IconProps = ComponentProps<'svg'> & {
   name: IconName
 }
 

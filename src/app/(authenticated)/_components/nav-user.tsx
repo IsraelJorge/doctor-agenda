@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation'
 
-import { Icon } from '@/components/icon'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
@@ -12,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Icon } from '@/components/ui/icon'
 import {
   SidebarMenu,
   SidebarMenuButton,
