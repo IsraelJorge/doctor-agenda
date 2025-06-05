@@ -2,6 +2,7 @@ import { z } from '@/lib/zod'
 
 export const DoctorFormSchema = z
   .object({
+    id: z.uuid().optional(),
     name: z.string().trim().min(3),
     specialty: z.string().trim().min(3),
     availableFromWeekDay: z.number().min(0).max(6),
@@ -9,7 +10,6 @@ export const DoctorFormSchema = z
     availableFromTime: z.string(),
     availableToTime: z.string(),
     appointmentPrice: z.number().min(0),
-    clinicId: z.string(),
   })
   .refine(
     (data) => {

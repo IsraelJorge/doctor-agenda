@@ -1,9 +1,12 @@
 'use client'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
+import { useAction } from 'next-safe-action/hooks'
 import { useForm } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
+import { toast } from 'sonner'
 
+import { upsertDoctor } from '@/actions/upsert-doctor'
 import { Button } from '@/components/ui/button'
 import {
   DialogClose,
@@ -35,7 +38,11 @@ import { DoctorForm, DoctorFormSchema } from '@/data/schemas/doctor'
 
 import { medicalSpecialties } from '../_constants'
 
-export function UpsertDoctorForm() {
+type UpsertDoctorFormProps = {
+  onSuccess?: () => void
+}
+
+export function UpsertDoctorForm({ onSuccess }: UpsertDoctorFormProps) {
   const form = useForm<DoctorForm>({
     resolver: standardSchemaResolver(DoctorFormSchema),
     defaultValues: {
@@ -45,13 +52,25 @@ export function UpsertDoctorForm() {
       availableToTime: '',
       availableFromWeekDay: 1,
       availableToWeekDay: 5,
-      clinicId: '',
       specialty: '',
     },
   })
 
+  console.log({ error: form.formState.errors })
+
+  const upsertDoctorAction = useAction(upsertDoctor, {
+    onSuccess: () => {
+      toast.success('Médico adicionado com sucesso!')
+      form.reset()
+      onSuccess?.()
+    },
+    onError: () => {
+      toast.error('Ocorreu um erro ao adicionar o médico.')
+    },
+  })
+
   const onSubmit = (data: DoctorForm) => {
-    console.log(data)
+    upsertDoctorAction.execute(data)
   }
 
   return (
@@ -336,7 +355,13 @@ export function UpsertDoctorForm() {
             <DialogClose asChild>
               <Button variant="outline">Cancelar</Button>
             </DialogClose>
-            <Button type="submit">Adicionar</Button>
+            <Button
+              type="submit"
+              disabled={upsertDoctorAction.isPending}
+              isLoading={upsertDoctorAction.isPending}
+            >
+              Adicionar
+            </Button>
           </DialogFooter>
         </form>
       </Form>
