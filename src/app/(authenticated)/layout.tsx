@@ -1,3 +1,4 @@
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { PropsWithChildren } from 'react'
 
@@ -11,9 +12,17 @@ export default async function AuthenticatedLayout({
   children,
 }: PropsWithChildren) {
   const session = await getUserSession()
+  const headersList = await headers()
+  const referer = headersList.get('referer')
+  const url = new URL(referer || '')
+  const pathname = url.pathname
 
   if (!session) {
     redirect(Route.authentication)
+  }
+
+  if (session.user?.clinic && pathname !== Route.clinicForm) {
+    redirect(Route.clinicForm)
   }
 
   return (

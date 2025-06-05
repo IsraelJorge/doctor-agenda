@@ -36,9 +36,7 @@ export const auth = betterAuth({
         ...session,
         user: {
           ...user,
-          clinic: {
-            ...clinic.clinic,
-          },
+          clinic: clinic ? clinic.clinic : null,
         },
       }
     }),
