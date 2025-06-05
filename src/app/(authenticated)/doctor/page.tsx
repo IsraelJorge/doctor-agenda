@@ -8,7 +8,7 @@ import {
   PageTitle,
 } from '@/components/ui/page-container'
 
-import { DoctorForm } from './_components/doctor-form'
+import { AddDoctorButton } from './_components/add-doctor-button'
 
 export default function DoctorPage() {
   return (
@@ -19,7 +19,7 @@ export default function DoctorPage() {
           <PageDescription>Gerencie os médicos da sua clínica</PageDescription>
         </PageHeaderContent>
         <PageActions>
-          <DoctorForm />
+          <AddDoctorButton />
         </PageActions>
       </PageHeader>
 
