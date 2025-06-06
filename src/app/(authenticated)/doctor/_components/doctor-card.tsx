@@ -85,6 +85,7 @@ export function DoctorCard({ doctor }: DoctorCardProps) {
               availableToTime: to.format('HH:mm:ss'),
             }}
             onSuccess={() => setIsOpen(false)}
+            isOpen={isOpen}
           />
         </Dialog>
       </CardFooter>

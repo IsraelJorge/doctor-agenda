@@ -2,6 +2,7 @@
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { useAction } from 'next-safe-action/hooks'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
 import { toast } from 'sonner'
@@ -64,22 +65,32 @@ type UpsertDoctorFormProps = {
     avatarImageUrl: string | null
   }
   onSuccess?: () => void
+  isOpen?: boolean
 }
 
-export function UpsertDoctorForm({ doctor, onSuccess }: UpsertDoctorFormProps) {
+const getInitialValues = (doctor: UpsertDoctorFormProps['doctor']) => {
+  return {
+    name: doctor?.name ?? '',
+    appointmentPrice: doctor?.appointmentPriceInCents
+      ? doctor.appointmentPriceInCents / 100
+      : 0,
+    availableFromTime: doctor?.availableFromTime ?? '',
+    availableToTime: doctor?.availableToTime ?? '',
+    availableFromWeekDay: doctor?.availableFromWeekDay ?? 1,
+    availableToWeekDay: doctor?.availableToWeekDay ?? 5,
+    specialty: doctor?.specialty ?? '',
+  }
+}
+
+export function UpsertDoctorForm({
+  doctor,
+  onSuccess,
+  isOpen,
+}: UpsertDoctorFormProps) {
   const form = useForm<DoctorForm>({
+    shouldUnregister: true,
     resolver: standardSchemaResolver(DoctorFormSchema),
-    defaultValues: {
-      name: doctor?.name ?? '',
-      appointmentPrice: doctor?.appointmentPriceInCents
-        ? doctor.appointmentPriceInCents / 100
-        : 0,
-      availableFromTime: doctor?.availableFromTime ?? '',
-      availableToTime: doctor?.availableToTime ?? '',
-      availableFromWeekDay: doctor?.availableFromWeekDay ?? 1,
-      availableToWeekDay: doctor?.availableToWeekDay ?? 5,
-      specialty: doctor?.specialty ?? '',
-    },
+    defaultValues: getInitialValues(doctor),
   })
 
   const upsertDoctorAction = useAction(upsertDoctor, {
@@ -110,6 +121,12 @@ export function UpsertDoctorForm({ doctor, onSuccess }: UpsertDoctorFormProps) {
   const handleDeleteDoctor = ({ id }: { id: string }) => {
     deleteDoctorAction.execute({ id })
   }
+
+  useEffect(() => {
+    if (isOpen) {
+      form.reset(getInitialValues(doctor))
+    }
+  }, [isOpen])
 
   return (
     <DialogContent className="sm:max-w-[425px]">
