@@ -6,7 +6,19 @@ import { useForm } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
 import { toast } from 'sonner'
 
+import { deleteDoctor } from '@/actions/delete-doctor'
 import { upsertDoctor } from '@/actions/upsert-doctor'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import {
   DialogClose,
@@ -24,6 +36,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Icon } from '@/components/ui/icon'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -80,8 +93,22 @@ export function UpsertDoctorForm({ doctor, onSuccess }: UpsertDoctorFormProps) {
     },
   })
 
+  const deleteDoctorAction = useAction(deleteDoctor, {
+    onSuccess: () => {
+      toast.success('Médico deletado com sucesso!')
+      onSuccess?.()
+    },
+    onError: () => {
+      toast.error('Ocorreu um erro ao deletar o médico.')
+    },
+  })
+
   const onSubmit = (data: DoctorForm) => {
     upsertDoctorAction.execute({ ...data, id: doctor?.id })
+  }
+
+  const handleDeleteDoctor = ({ id }: { id: string }) => {
+    deleteDoctorAction.execute({ id })
   }
 
   return (
@@ -369,9 +396,44 @@ export function UpsertDoctorForm({ doctor, onSuccess }: UpsertDoctorFormProps) {
             />
           </div>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancelar</Button>
-            </DialogClose>
+            {doctor?.id ? (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive">
+                    <Icon name="trash" />
+                    Deletar
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Tem certeza que deseja deletar este médico?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Essa ação não poderá ser desfeita. Isso irá deletar o
+                      médico e todas as consultas agendadas.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction asChild>
+                      <Button
+                        disabled={deleteDoctorAction.isPending}
+                        isLoading={deleteDoctorAction.isPending}
+                        onClick={() => handleDeleteDoctor({ id: doctor.id })}
+                      >
+                        Confirmar
+                      </Button>
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            ) : (
+              <DialogClose asChild>
+                <Button variant="outline">Cancelar</Button>
+              </DialogClose>
+            )}
+
             <Button
               type="submit"
               disabled={upsertDoctorAction.isPending}
