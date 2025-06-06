@@ -56,8 +56,6 @@ export function UpsertDoctorForm({ onSuccess }: UpsertDoctorFormProps) {
     },
   })
 
-  console.log({ error: form.formState.errors })
-
   const upsertDoctorAction = useAction(upsertDoctor, {
     onSuccess: () => {
       toast.success('Médico adicionado com sucesso!')

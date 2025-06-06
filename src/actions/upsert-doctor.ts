@@ -3,6 +3,7 @@
 import { DoctorFormSchema } from '@/data/schemas/doctor'
 import { db } from '@/database'
 import { doctorTable } from '@/database/schemas'
+import { DateHelpers } from '@/helpers/date-helpers'
 import { getUserSession } from '@/lib/auth'
 import { actionClient } from '@/lib/safe-action'
 
@@ -19,6 +20,12 @@ export const upsertDoctor = actionClient
         ...parsedInput,
         appointmentPriceInCents: parsedInput.appointmentPrice * 100,
         clinicId: session.user.clinic.id,
+        availableFromTime: DateHelpers.convertHoursToUTC(
+          parsedInput.availableFromTime,
+        ),
+        availableToTime: DateHelpers.convertHoursToUTC(
+          parsedInput.availableToTime,
+        ),
       })
       .onConflictDoUpdate({
         target: [doctorTable.id],
