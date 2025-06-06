@@ -39,20 +39,33 @@ import { DoctorForm, DoctorFormSchema } from '@/data/schemas/doctor'
 import { medicalSpecialties } from '../_constants'
 
 type UpsertDoctorFormProps = {
+  doctor?: {
+    id: string
+    name: string
+    specialty: string
+    availableFromWeekDay: number
+    availableToWeekDay: number
+    availableFromTime: string
+    availableToTime: string
+    appointmentPriceInCents: number
+    avatarImageUrl: string | null
+  }
   onSuccess?: () => void
 }
 
-export function UpsertDoctorForm({ onSuccess }: UpsertDoctorFormProps) {
+export function UpsertDoctorForm({ doctor, onSuccess }: UpsertDoctorFormProps) {
   const form = useForm<DoctorForm>({
     resolver: standardSchemaResolver(DoctorFormSchema),
     defaultValues: {
-      name: '',
-      appointmentPrice: 0,
-      availableFromTime: '',
-      availableToTime: '',
-      availableFromWeekDay: 1,
-      availableToWeekDay: 5,
-      specialty: '',
+      name: doctor?.name ?? '',
+      appointmentPrice: doctor?.appointmentPriceInCents
+        ? doctor.appointmentPriceInCents / 100
+        : 0,
+      availableFromTime: doctor?.availableFromTime ?? '',
+      availableToTime: doctor?.availableToTime ?? '',
+      availableFromWeekDay: doctor?.availableFromWeekDay ?? 1,
+      availableToWeekDay: doctor?.availableToWeekDay ?? 5,
+      specialty: doctor?.specialty ?? '',
     },
   })
 
@@ -68,7 +81,7 @@ export function UpsertDoctorForm({ onSuccess }: UpsertDoctorFormProps) {
   })
 
   const onSubmit = (data: DoctorForm) => {
-    upsertDoctorAction.execute(data)
+    upsertDoctorAction.execute({ ...data, id: doctor?.id })
   }
 
   return (
@@ -76,8 +89,14 @@ export function UpsertDoctorForm({ onSuccess }: UpsertDoctorFormProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <DialogHeader>
-            <DialogTitle>Adicionar Médico</DialogTitle>
-            <DialogDescription>Adicionar um novo médico.</DialogDescription>
+            <DialogTitle>
+              {doctor?.id ? doctor.name : 'Adicionar Médico'}
+            </DialogTitle>
+            <DialogDescription>
+              {doctor?.id
+                ? 'Edite as informações do médico.'
+                : 'Adicionar um novo médico.'}
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4">
             <FormField
@@ -358,7 +377,7 @@ export function UpsertDoctorForm({ onSuccess }: UpsertDoctorFormProps) {
               disabled={upsertDoctorAction.isPending}
               isLoading={upsertDoctorAction.isPending}
             >
-              Adicionar
+              {doctor?.id ? 'Atualizar' : 'Adicionar'}
             </Button>
           </DialogFooter>
         </form>

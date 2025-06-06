@@ -1,7 +1,10 @@
+import 'dayjs/locale/pt-br'
+
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
 dayjs.extend(utc)
+dayjs.locale('pt-br')
 
 export const DateHelpers = {
   convertHoursToUTC: (hours: string) => {
@@ -15,5 +18,40 @@ export const DateHelpers = {
       .format('HH:mm:ss')
 
     return hoursUTC
+  },
+  getWeekAndTimeAvailability: ({
+    availableFromWeekDay,
+    availableToWeekDay,
+    availableFromTime,
+    availableToTime,
+  }: {
+    availableFromWeekDay: number
+    availableToWeekDay: number
+    availableFromTime: string
+    availableToTime: string
+  }) => {
+    const [hourFrom, minutesFrom, secondsFrom] = availableFromTime.split(':')
+    const [hourTo, minutesTo, secondsTo] = availableToTime.split(':')
+
+    const from = dayjs()
+      .utc()
+      .day(availableFromWeekDay)
+      .set('hour', Number(hourFrom))
+      .set('minute', Number(minutesFrom))
+      .set('second', Number(secondsFrom))
+      .local()
+
+    const to = dayjs()
+      .utc()
+      .day(availableToWeekDay)
+      .set('hour', Number(hourTo))
+      .set('minute', Number(minutesTo))
+      .set('second', Number(secondsTo))
+      .local()
+
+    return {
+      from,
+      to,
+    }
   },
 }
