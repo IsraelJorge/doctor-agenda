@@ -2,17 +2,9 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 
-import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Icon } from '@/components/ui/icon'
 import { patientTable } from '@/database/schemas/patient'
+
+import { PatientTableActions } from './patient-table-actions'
 
 export type Patient = typeof patientTable.$inferSelect
 
@@ -42,27 +34,7 @@ export const columns: ColumnDef<Patient>[] = [
   {
     id: 'actions',
     cell: (info) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Icon name="more-vertical" className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>{info.cell.row.original.name}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Icon name="edit" />
-              Editar
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Icon name="trash-2" />
-              Excluir
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+      return <PatientTableActions patient={info.cell.row.original} />
     },
   },
 ]
