@@ -1,3 +1,5 @@
+import { findPatient } from '@/actions/find-patient'
+import { DataTable } from '@/components/ui/data-table'
 import {
   PageActions,
   PageContainer,
@@ -9,8 +11,11 @@ import {
 } from '@/components/ui/page-container'
 
 import { AddPatientButton } from './_components/add-patient-button'
+import { columns } from './_components/table-columns'
 
-export default function PatientPage() {
+export default async function PatientPage() {
+  const patients = await findPatient()
+
   return (
     <PageContainer>
       <PageHeader>
@@ -25,7 +30,9 @@ export default function PatientPage() {
         </PageActions>
       </PageHeader>
 
-      <PageContent>{/* Futuramente: listagem de pacientes */}</PageContent>
+      <PageContent>
+        <DataTable data={patients} columns={columns} />
+      </PageContent>
     </PageContainer>
   )
 }
