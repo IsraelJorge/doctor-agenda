@@ -1,5 +1,7 @@
+import { findAppointment } from '@/actions/find-appointment'
 import { findDoctor } from '@/actions/find-doctor'
 import { findPatient } from '@/actions/find-patient'
+import { DataTable } from '@/components/ui/data-table'
 import {
   PageActions,
   PageContainer,
@@ -11,9 +13,14 @@ import {
 } from '@/components/ui/page-container'
 
 import { AddAppointmentButton } from './_components/add-appointment-button'
+import { columns } from './_components/table-columns'
 
 export default async function AppointmentPage() {
-  const [patients, doctors] = await Promise.all([findPatient(), findDoctor()])
+  const [patients, doctors, appointments] = await Promise.all([
+    findPatient(),
+    findDoctor(),
+    findAppointment(),
+  ])
 
   return (
     <PageContainer>
@@ -28,7 +35,9 @@ export default async function AppointmentPage() {
           <AddAppointmentButton patients={patients} doctors={doctors} />
         </PageActions>
       </PageHeader>
-      <PageContent />
+      <PageContent>
+        <DataTable data={appointments} columns={columns} />
+      </PageContent>
     </PageContainer>
   )
 }

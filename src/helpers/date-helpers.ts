@@ -66,4 +66,7 @@ export const DateHelpers = {
 
     return newDate
   },
+  formatDateWithTime(date: Date) {
+    return dayjs(date).local().format('DD/MM/YYYY [às] HH:mm')
+  },
 }
