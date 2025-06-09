@@ -54,4 +54,16 @@ export const DateHelpers = {
       to,
     }
   },
+  setHoursDate: (date: Date, hours: string) => {
+    const [hour, minutes, seconds] = hours.split(':')
+
+    const newDate = dayjs(date)
+      .set('hour', parseInt(hour))
+      .set('minute', parseInt(minutes))
+      .set('second', parseInt(seconds))
+      .utc()
+      .toDate()
+
+    return newDate
+  },
 }

@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { pgTable, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { integer, pgTable, timestamp, uuid } from 'drizzle-orm/pg-core'
 
 import { clinicTable } from './clinic'
 import { doctorTable } from './doctor'
@@ -8,6 +8,7 @@ import { patientTable } from './patient'
 export const appointmentTable = pgTable('appointment', {
   id: uuid('id').defaultRandom().primaryKey(),
   date: timestamp('date').notNull(),
+  appointmentPriceInCents: integer('appointment_price_in_cents').notNull(),
   clinicId: uuid('clinic_id')
     .notNull()
     .references(() => clinicTable.id, { onDelete: 'cascade' }),
