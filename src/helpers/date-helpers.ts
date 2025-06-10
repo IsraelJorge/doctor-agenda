@@ -1,12 +1,15 @@
 import 'dayjs/locale/pt-br'
 
-import dayjs from 'dayjs'
+import dayjs, { OpUnitType } from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
 dayjs.extend(utc)
 dayjs.locale('pt-br')
 
 export const DateHelpers = {
+  format: ({ date, format }: { date: Date | string; format: string }) => {
+    return dayjs(date).format(format)
+  },
   convertHoursToUTC: (hours: string) => {
     const [hour, minutes, seconds] = hours.split(':')
 
@@ -68,5 +71,32 @@ export const DateHelpers = {
   },
   formatDateWithTime(date: Date) {
     return dayjs(date).local().format('DD/MM/YYYY [às] HH:mm')
+  },
+  isSame: ({
+    date,
+    current,
+    type,
+  }: {
+    date: Date
+    current: Date
+    type: OpUnitType
+  }) => {
+    return dayjs(date).isSame(current, type)
+  },
+  getDateUTC: (date?: Date | string) => {
+    return dayjs(date).utc()
+  },
+  timeStringToLocalDate: (time: string) => {
+    const [hour, minutes] = time.split(':')
+
+    return dayjs()
+      .utc()
+      .set('hour', Number(hour))
+      .set('minute', Number(minutes))
+      .set('second', 0)
+      .local()
+  },
+  getDay: (date: Date | string) => {
+    return dayjs(date).day()
   },
 }
