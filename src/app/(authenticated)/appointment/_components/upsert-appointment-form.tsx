@@ -69,7 +69,9 @@ function getInitialValues(
     appointmentPrice: appointment?.appointmentPriceInCents
       ? appointment.appointmentPriceInCents / 100
       : 0,
-    date: appointment?.date ? new Date(appointment.date) : new Date(),
+    date: appointment?.date
+      ? new Date(appointment.date)
+      : new Date(new Date().setDate(new Date().getDate() + 1)),
     time: appointment?.date ? appointment.date.toTimeString().slice(0, 5) : '',
   }
 }
