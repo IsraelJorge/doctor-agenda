@@ -10,6 +10,8 @@ import { getUserSession } from '@/lib/auth'
 import { actionClient } from '@/lib/safe-action'
 import { Route } from '@/utils/routes'
 
+import { findAvailableTimes } from './find-available-times'
+
 export const upsertAppointment = actionClient
   .inputSchema(AppointmentFormSchema)
   .action(async ({ parsedInput }) => {
@@ -19,6 +21,22 @@ export const upsertAppointment = actionClient
 
     const date = new Date(parsedInput.date)
     const dateWithTimeUTC = DateHelpers.setHoursDate(date, parsedInput.time)
+
+    const availableTimes = await findAvailableTimes({
+      date: DateHelpers.format({
+        date: dateWithTimeUTC,
+        format: 'YYYY-MM-DD',
+      }),
+      doctorId: parsedInput.doctorId,
+    })
+
+    if (!availableTimes?.data) throw new Error('No available times')
+
+    const isTimeAvailable = availableTimes.data.some(
+      (time) => time.value === parsedInput.time && time.available,
+    )
+
+    if (!isTimeAvailable) throw new Error('Time is not available')
 
     await db
       .insert(appointmentTable)
