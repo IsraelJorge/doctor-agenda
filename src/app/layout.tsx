@@ -1,19 +1,16 @@
 import '@/styles/globals.css'
 
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Manrope } from 'next/font/google'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import { Toaster } from '@/components/ui/sonner'
 import { ReactQueryProvider } from '@/providers/react-query'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const manrope = Manrope({
   subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-manrope',
 })
 
 export const metadata: Metadata = {
@@ -28,10 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+      <body className={`${manrope.variable} antialiased`}>
+        <NuqsAdapter>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </NuqsAdapter>
         <Toaster richColors position="top-right" theme="light" />
       </body>
     </html>
