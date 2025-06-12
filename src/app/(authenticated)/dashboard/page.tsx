@@ -13,8 +13,10 @@ import {
 import { DateHelpers } from '@/helpers/date-helpers'
 import { Route } from '@/utils/routes'
 
+import { AppointmentsChart } from './_components/appointments-chart'
 import { DatePicker } from './_components/date-picker'
 import { StatsCards } from './_components/stats-cards'
+import { TopDoctors } from './_components/top-doctors'
 
 interface DashboardPageProps {
   searchParams: Promise<{
@@ -36,11 +38,17 @@ export default async function DashboardPage({
     )
   }
 
-  const { totalRevenue, totalAppointments, totalPatients, totalDoctors } =
-    await findDashboard({
-      from,
-      to,
-    })
+  const {
+    totalRevenue,
+    totalAppointments,
+    totalPatients,
+    totalDoctors,
+    dailyAppointmentsData,
+    topDoctors,
+  } = await findDashboard({
+    from,
+    to,
+  })
 
   return (
     <PageContainer>
@@ -63,6 +71,10 @@ export default async function DashboardPage({
           totalPatients={totalPatients.total}
           totalDoctors={totalDoctors.total}
         />
+        <div className="grid grid-cols-[2.25fr_1fr] gap-4">
+          <AppointmentsChart dailyAppointmentsData={dailyAppointmentsData} />
+          <TopDoctors doctors={topDoctors} />
+        </div>
       </PageContent>
     </PageContainer>
   )
