@@ -22,7 +22,9 @@ export async function middleware(request: NextRequest) {
 
   const shouldRedirectToLogin = !session && pathname !== Route.authentication
   const shouldRedirectToClinicForm =
-    !session?.user?.clinic?.id && pathname !== Route.clinicForm
+    !session?.user?.clinic?.id &&
+    pathname !== Route.clinicForm &&
+    pathname !== Route.authentication
 
   if (shouldRedirectToLogin) {
     return NextResponse.redirect(new URL(Route.authentication, request.url))
