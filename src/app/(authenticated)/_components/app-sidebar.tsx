@@ -38,6 +38,14 @@ const items: AppSidebarManuItem[] = [
   },
 ]
 
+const otherItems: AppSidebarManuItem[] = [
+  {
+    title: 'Planos',
+    url: Route.subscription,
+    icon: 'gem',
+  },
+]
+
 export async function AppSidebar() {
   const session = await getUserSession()
 
@@ -51,6 +59,12 @@ export async function AppSidebar() {
           <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
           <SidebarGroupContent>
             <AppSidebarMenuList items={items} />
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Outros</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <AppSidebarMenuList items={otherItems} />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
