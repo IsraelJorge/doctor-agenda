@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/page-container'
 
 import { AddAppointmentButton } from './_components/add-appointment-button'
-import { columns } from './_components/table-columns'
+import { appointmentsTableColumns } from './_components/table-columns'
 
 export default async function AppointmentPage() {
   const [patients, doctors, appointments] = await Promise.all([
@@ -36,7 +36,7 @@ export default async function AppointmentPage() {
         </PageActions>
       </PageHeader>
       <PageContent>
-        <DataTable data={appointments} columns={columns} />
+        <DataTable data={appointments} columns={appointmentsTableColumns} />
       </PageContent>
     </PageContainer>
   )

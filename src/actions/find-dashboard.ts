@@ -36,6 +36,8 @@ export const findDashboard = async ({ from, to }: Params) => {
     [totalDoctors],
     dailyAppointmentsData,
     topDoctors,
+    topSpecialties,
+    todayAppointments,
   ] = await Promise.all([
     db
       .select({
@@ -113,6 +115,39 @@ export const findDashboard = async ({ from, to }: Params) => {
       .groupBy(doctorTable.id)
       .orderBy(desc(count(appointmentTable.id)))
       .limit(10),
+    db
+      .select({
+        specialty: doctorTable.specialty,
+        appointments: count(appointmentTable.id),
+      })
+      .from(appointmentTable)
+      .innerJoin(doctorTable, eq(appointmentTable.doctorId, doctorTable.id))
+      .where(
+        and(
+          eq(appointmentTable.clinicId, session.user.clinic.id),
+          gte(appointmentTable.date, fromDate),
+          lte(appointmentTable.date, toDate),
+        ),
+      )
+      .groupBy(doctorTable.specialty)
+      .orderBy(desc(count(appointmentTable.id))),
+    db.query.appointmentTable.findMany({
+      where: and(
+        eq(appointmentTable.clinicId, session.user.clinic.id),
+        gte(
+          appointmentTable.date,
+          DateHelpers.getInstanceDayjs().utc().startOf('day').toDate(),
+        ),
+        lte(
+          appointmentTable.date,
+          DateHelpers.getInstanceDayjs().utc().endOf('day').toDate(),
+        ),
+      ),
+      with: {
+        patient: true,
+        doctor: true,
+      },
+    }),
   ])
 
   return {
@@ -122,5 +157,7 @@ export const findDashboard = async ({ from, to }: Params) => {
     totalDoctors,
     dailyAppointmentsData,
     topDoctors,
+    topSpecialties,
+    todayAppointments,
   }
 }

@@ -17,7 +17,7 @@ export type Appointment = typeof appointmentTable.$inferSelect & {
   }
 }
 
-export const columns: ColumnDef<Appointment>[] = [
+export const appointmentsTableColumns: ColumnDef<Appointment>[] = [
   {
     accessorKey: 'patient.name',
     header: 'Paciente',
