@@ -56,4 +56,5 @@ export const upsertAppointment = actionClient
       })
 
     revalidatePath(Route.appointment)
+    revalidatePath(Route.dashboard)
   })

@@ -20,6 +20,7 @@ Tecnologias e ferramentas utilizadas:
 - BetterAuth para autenticação
 - PostgreSQL como banco de dados
 - Drizzle como ORM
+- Dayjs para manipular datas, seus helpers ficam no arquivo [date-helpers.ts](mdc:src/helpers/date-helpers.ts)
 
 Princípios Principais:
 

@@ -99,4 +99,7 @@ export const DateHelpers = {
   getDay: (date: Date | string) => {
     return dayjs(date).day()
   },
+  getInstanceDayjs(date?: Date | string) {
+    return dayjs(date)
+  },
 }

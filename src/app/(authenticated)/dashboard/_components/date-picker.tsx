@@ -1,9 +1,8 @@
 'use client'
 
-import { addMonths, format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Calendar as CalendarIcon } from 'lucide-react'
-import { parseAsIsoDate, useQueryState } from 'nuqs'
+import { useQueryState } from 'nuqs'
 import * as React from 'react'
 import { DateRange } from 'react-day-picker'
 
@@ -14,6 +13,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { DateHelpers } from '@/helpers/date-helpers'
+import { parseAsIsoDate } from '@/lib/nuqs'
 import { cn } from '@/lib/utils'
 
 export function DatePicker({
@@ -21,11 +22,13 @@ export function DatePicker({
 }: React.HTMLAttributes<HTMLDivElement>) {
   const [from, setFrom] = useQueryState(
     'from',
-    parseAsIsoDate.withDefault(new Date()),
+    parseAsIsoDate.withDefault(DateHelpers.getInstanceDayjs().toDate()),
   )
   const [to, setTo] = useQueryState(
     'to',
-    parseAsIsoDate.withDefault(addMonths(new Date(), 1)),
+    parseAsIsoDate.withDefault(
+      DateHelpers.getInstanceDayjs().add(1, 'month').toDate(),
+    ),
   )
   const handleDateSelect = (dateRange: DateRange | undefined) => {
     if (dateRange?.from) {
@@ -43,6 +46,7 @@ export function DatePicker({
     from,
     to,
   }
+
   return (
     <div className={cn('grid gap-2', className)}>
       <Popover>
@@ -59,19 +63,24 @@ export function DatePicker({
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, 'LLL dd, y', {
-                    locale: ptBR,
+                  {DateHelpers.format({
+                    date: date.from,
+                    format: 'MMM D, YYYY',
                   })}{' '}
                   -{' '}
-                  {format(date.to, 'LLL dd, y', {
-                    locale: ptBR,
+                  {DateHelpers.format({
+                    date: date.to,
+                    format: 'MMM D, YYYY',
                   })}
                 </>
               ) : (
-                format(date.from, 'LLL dd, y')
+                DateHelpers.format({
+                  date: date.from,
+                  format: 'MMM D, YYYY',
+                })
               )
             ) : (
-              <span>Pick a date</span>
+              <span>Selecione o range de datas</span>
             )}
           </Button>
         </PopoverTrigger>
