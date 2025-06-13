@@ -26,17 +26,21 @@ export const auth = betterAuth({
   plugins: [
     nextCookies(),
     customSession(async ({ session, user }) => {
-      const [clinic] = await db.query.usersToClinicsTable.findMany({
-        where: eq(schemas.usersToClinicsTable.userId, user.id),
-        with: {
-          clinic: true,
-          user: true,
-        },
-      })
+      const [userData, [clinic]] = await Promise.all([
+        db.query.userTable.findFirst({
+          where: eq(schemas.userTable.id, user.id),
+        }),
+        db.query.usersToClinicsTable.findMany({
+          where: eq(schemas.usersToClinicsTable.userId, user.id),
+          with: {
+            clinic: true,
+          },
+        }),
+      ])
 
       const newUser = {
         ...user,
-        plan: clinic?.user?.plan,
+        plan: userData?.plan,
         clinic: clinic ? clinic.clinic : null,
       }
 

@@ -8,7 +8,6 @@ import { Route } from '@/utils/routes'
 export const createStripeCheckout = actionClient.action(async () => {
   const session = await getUserSession()
   if (!session) throw new Error('Unauthorized')
-  if (!session.user.clinic?.id) throw Error('Not found clinic')
 
   const stripeSession = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -19,7 +18,6 @@ export const createStripeCheckout = actionClient.action(async () => {
     subscription_data: {
       metadata: {
         userId: session.user.id,
-        clinicId: session.user.clinic.id,
       },
     },
     line_items: [

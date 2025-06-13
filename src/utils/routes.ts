@@ -7,4 +7,5 @@ export const Route = {
   doctor: '/doctor',
   patient: '/patient',
   subscription: '/subscription',
+  newSubscription: '/new-subscription',
 } as const

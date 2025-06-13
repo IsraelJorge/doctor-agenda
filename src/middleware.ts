@@ -21,6 +21,12 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   const shouldRedirectToLogin = !session && pathname !== Route.authentication
+
+  const shouldRedirectNewSubscription =
+    !session?.user?.plan &&
+    pathname !== Route.newSubscription &&
+    pathname !== Route.authentication
+
   const shouldRedirectToClinicForm =
     !session?.user?.clinic?.id &&
     pathname !== Route.clinicForm &&
@@ -28,6 +34,10 @@ export async function middleware(request: NextRequest) {
 
   if (shouldRedirectToLogin) {
     return NextResponse.redirect(new URL(Route.authentication, request.url))
+  }
+
+  if (shouldRedirectNewSubscription) {
+    return NextResponse.redirect(new URL(Route.newSubscription, request.url))
   }
 
   if (shouldRedirectToClinicForm) {
