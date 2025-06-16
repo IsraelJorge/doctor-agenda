@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { createClinic } from '@/actions/create-clinic'
+import { createClinic } from '@/actions/clinic/create-clinic'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,

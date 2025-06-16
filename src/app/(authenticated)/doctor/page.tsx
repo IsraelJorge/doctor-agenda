@@ -1,4 +1,4 @@
-import { findDoctor } from '@/actions/find-doctor'
+import { findDoctor } from '@/actions/doctor/find-doctor'
 import {
   PageActions,
   PageContainer,

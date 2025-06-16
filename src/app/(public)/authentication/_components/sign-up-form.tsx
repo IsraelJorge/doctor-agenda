@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { signUp } from '@/actions/sign-up'
+import { signUp } from '@/actions/auth/sign-up'
 import { Button } from '@/components/ui/button'
 import {
   Card,

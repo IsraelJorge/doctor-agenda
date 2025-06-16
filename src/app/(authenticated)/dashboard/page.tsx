@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 
-import { findDashboard } from '@/actions/find-dashboard'
+import { findDashboard } from '@/actions/dashboard/find-dashboard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DataTable } from '@/components/ui/data-table'
 import { Icon } from '@/components/ui/icon'

@@ -1,6 +1,6 @@
-import { findAppointment } from '@/actions/find-appointment'
-import { findDoctor } from '@/actions/find-doctor'
-import { findPatient } from '@/actions/find-patient'
+import { findAppointment } from '@/actions/appointment/find-appointment'
+import { findDoctor } from '@/actions/doctor/find-doctor'
+import { findPatient } from '@/actions/patient/find-patient'
 import { DataTable } from '@/components/ui/data-table'
 import {
   PageActions,
