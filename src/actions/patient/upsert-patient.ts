@@ -5,16 +5,16 @@ import { revalidatePath } from 'next/cache'
 import { PatientFormSchema } from '@/data/schemas/patient'
 import { db } from '@/database'
 import { patientTable } from '@/database/schemas'
-import { getUserSession } from '@/lib/auth'
 import { actionClient } from '@/lib/safe-action'
+import { GuardService } from '@/services/guard-service'
 import { Route } from '@/utils/routes'
 
 export const upsertPatient = actionClient
   .inputSchema(PatientFormSchema)
   .action(async ({ parsedInput }) => {
-    const session = await getUserSession()
-    if (!session) throw new Error('Unauthorized')
-    if (!session.user.clinic?.id) throw Error('Not found clinic')
+    const session = await GuardService.getValidatedSession({
+      requireClinic: true,
+    })
 
     await db
       .insert(patientTable)

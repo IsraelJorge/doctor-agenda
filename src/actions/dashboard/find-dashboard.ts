@@ -3,7 +3,7 @@ import { and, count, desc, eq, gte, lte, sql, sum } from 'drizzle-orm'
 import { db } from '@/database'
 import { appointmentTable, doctorTable, patientTable } from '@/database/schemas'
 import { DateHelpers } from '@/helpers/date-helpers'
-import { getUserSession } from '@/lib/auth'
+import { GuardService } from '@/services/guard-service'
 
 type Params = {
   from: string
@@ -11,9 +11,9 @@ type Params = {
 }
 
 export const findDashboard = async ({ from, to }: Params) => {
-  const session = await getUserSession()
-  if (!session) throw new Error('Unauthorized')
-  if (!session.user.clinic?.id) throw Error('Not found clinic')
+  const session = await GuardService.getValidatedSession({
+    requireClinic: true,
+  })
 
   const fromDate = DateHelpers.getInstanceDayjs(from)
     .utc()

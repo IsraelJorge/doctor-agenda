@@ -2,12 +2,13 @@
 
 import { revalidatePath } from 'next/cache'
 
+import { ErrorUtils } from '@/data/erros'
 import { AppointmentFormSchema } from '@/data/schemas/appointment'
 import { db } from '@/database'
 import { appointmentTable } from '@/database/schemas'
 import { DateHelpers } from '@/helpers/date-helpers'
-import { getUserSession } from '@/lib/auth'
 import { actionClient } from '@/lib/safe-action'
+import { GuardService } from '@/services/guard-service'
 import { Route } from '@/utils/routes'
 
 import { findAvailableTimes } from './find-available-times'
@@ -15,9 +16,9 @@ import { findAvailableTimes } from './find-available-times'
 export const upsertAppointment = actionClient
   .inputSchema(AppointmentFormSchema)
   .action(async ({ parsedInput }) => {
-    const session = await getUserSession()
-    if (!session) throw new Error('Unauthorized')
-    if (!session.user.clinic?.id) throw Error('Not found clinic')
+    const session = await GuardService.getValidatedSession({
+      requireClinic: true,
+    })
 
     const date = new Date(parsedInput.date)
     const dateWithTimeUTC = DateHelpers.setHoursDate(date, parsedInput.time)
@@ -30,13 +31,21 @@ export const upsertAppointment = actionClient
       doctorId: parsedInput.doctorId,
     })
 
-    if (!availableTimes?.data) throw new Error('No available times')
+    if (!availableTimes?.data) {
+      return ErrorUtils.validationError({
+        message: 'Time is not available',
+      })
+    }
 
     const isTimeAvailable = availableTimes.data.some(
       (time) => time.value === parsedInput.time && time.available,
     )
 
-    if (!isTimeAvailable) throw new Error('Time is not available')
+    if (!isTimeAvailable) {
+      return ErrorUtils.validationError({
+        message: 'Time is not available',
+      })
+    }
 
     await db
       .insert(appointmentTable)

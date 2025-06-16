@@ -3,30 +3,36 @@
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
+import { ErrorUtils } from '@/data/erros'
+import { IdSchema } from '@/data/schemas/shared'
 import { db } from '@/database'
 import { patientTable } from '@/database/schemas/patient'
-import { getUserSession } from '@/lib/auth'
 import { actionClient } from '@/lib/safe-action'
-import { z } from '@/lib/zod'
+import { GuardService } from '@/services/guard-service'
 import { Route } from '@/utils/routes'
 
 export const deletePatient = actionClient
-  .inputSchema(
-    z.object({
-      id: z.uuid(),
-    }),
-  )
+  .inputSchema(IdSchema)
   .action(async ({ parsedInput }) => {
-    const session = await getUserSession()
-    if (!session) throw new Error('Unauthorized')
+    const session = await GuardService.getValidatedSession({
+      requireClinic: true,
+    })
 
     const patient = await db.query.patientTable.findFirst({
       where: eq(patientTable.id, parsedInput.id),
     })
 
-    if (!patient) throw new Error('Patient not found')
-    if (patient.clinicId !== session.user.clinic?.id)
-      throw new Error('Unauthorized')
+    if (!patient) {
+      return ErrorUtils.notFound({
+        message: 'Patient not found',
+      })
+    }
+
+    if (patient.clinicId !== session.user.clinic.id) {
+      return ErrorUtils.unauthorized({
+        message: 'You are not authorized to delete this patient',
+      })
+    }
 
     await db.delete(patientTable).where(eq(patientTable.id, parsedInput.id))
     revalidatePath(Route.patient)

@@ -11,8 +11,6 @@ export const findDoctor = async () => {
     requireClinic: true,
   })
 
-  console.log({ session })
-
   const doctors = await db.query.doctorTable.findMany({
     where: eq(doctorTable.clinicId, session.user.clinic.id),
   })

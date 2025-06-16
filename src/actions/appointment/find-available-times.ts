@@ -2,13 +2,14 @@
 
 import { and, eq, sql } from 'drizzle-orm'
 
+import { ErrorUtils } from '@/data/erros'
 import { db } from '@/database'
 import { appointmentTable, doctorTable } from '@/database/schemas'
 import { DateHelpers } from '@/helpers/date-helpers'
 import { generateTimeSlots } from '@/helpers/time'
-import { getUserSession } from '@/lib/auth'
 import { actionClient } from '@/lib/safe-action'
 import { z } from '@/lib/zod'
+import { GuardService } from '@/services/guard-service'
 
 export const findAvailableTimes = actionClient
   .inputSchema(
@@ -18,15 +19,19 @@ export const findAvailableTimes = actionClient
     }),
   )
   .action(async ({ parsedInput }) => {
-    const session = await getUserSession()
-    if (!session) throw new Error('Unauthorized')
-    if (!session.user.clinic?.id) throw Error('Not found clinic')
+    await GuardService.getValidatedSession({
+      requireClinic: true,
+    })
 
     const doctor = await db.query.doctorTable.findFirst({
       where: eq(doctorTable.id, parsedInput.doctorId),
     })
 
-    if (!doctor) throw new Error('Doctor not found')
+    if (!doctor) {
+      return ErrorUtils.notFound({
+        message: 'Doctor not found',
+      })
+    }
 
     const selectedDayOfWeek = DateHelpers.getDay(parsedInput.date)
 
