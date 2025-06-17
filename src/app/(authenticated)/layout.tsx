@@ -19,7 +19,7 @@ export default async function AuthenticatedLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="w-full">
+      <main className="@container/main w-full">
         <SidebarTrigger />
         {children}
       </main>

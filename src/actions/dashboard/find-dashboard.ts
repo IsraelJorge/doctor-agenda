@@ -4,6 +4,7 @@ import { db } from '@/database'
 import { appointmentTable, doctorTable, patientTable } from '@/database/schemas'
 import { DateHelpers } from '@/helpers/date-helpers'
 import { GuardService } from '@/services/guard-service'
+import { mergeDoctorsAndPatientsByMonth } from '@/utils/merge-doctors-and-patients-by-month'
 
 type Params = {
   from: string
@@ -29,6 +30,15 @@ export const findDashboard = async ({ from, to }: Params) => {
     .endOf('day')
     .toDate()
 
+  const chartStartDateMonth = DateHelpers.getInstanceDayjs()
+    .subtract(5, 'months')
+    .startOf('month')
+    .toDate()
+  const chartEndDateMonth = DateHelpers.getInstanceDayjs()
+    .utc()
+    .endOf('month')
+    .toDate()
+
   const [
     [totalRevenue],
     [totalAppointments],
@@ -38,6 +48,8 @@ export const findDashboard = async ({ from, to }: Params) => {
     topDoctors,
     topSpecialties,
     todayAppointments,
+    doctorsByMonth,
+    patientsByMonth,
   ] = await Promise.all([
     db
       .select({
@@ -114,7 +126,7 @@ export const findDashboard = async ({ from, to }: Params) => {
       .where(eq(doctorTable.clinicId, session.user.clinic.id))
       .groupBy(doctorTable.id)
       .orderBy(desc(count(appointmentTable.id)))
-      .limit(10),
+      .limit(5),
     db
       .select({
         specialty: doctorTable.specialty,
@@ -148,7 +160,44 @@ export const findDashboard = async ({ from, to }: Params) => {
         doctor: true,
       },
     }),
+    db
+      .select({
+        month: sql<string>`DATE_TRUNC('month', ${doctorTable.createdAt})`.as(
+          'month',
+        ),
+        total: sql<number>`COUNT(*)`.as('total'),
+      })
+      .from(doctorTable)
+      .where(
+        and(
+          sql`${doctorTable.createdAt} BETWEEN ${chartStartDateMonth} AND ${chartEndDateMonth}`,
+          eq(doctorTable.clinicId, session.user.clinic.id),
+        ),
+      )
+      .groupBy(sql`DATE_TRUNC('month', ${doctorTable.createdAt})`)
+      .orderBy(sql`DATE_TRUNC('month', ${doctorTable.createdAt})`),
+    db
+      .select({
+        month: sql<string>`DATE_TRUNC('month', ${patientTable.createdAt})`.as(
+          'month',
+        ),
+        total: sql<number>`COUNT(*)`.as('total'),
+      })
+      .from(patientTable)
+      .where(
+        and(
+          sql`${patientTable.createdAt} BETWEEN ${chartStartDateMonth} AND ${chartEndDateMonth}`,
+          eq(patientTable.clinicId, session.user.clinic.id),
+        ),
+      )
+      .groupBy(sql`DATE_TRUNC('month', ${patientTable.createdAt})`)
+      .orderBy(sql`DATE_TRUNC('month', ${patientTable.createdAt})`),
   ])
+
+  const doctorsAndPatientsByMonth = mergeDoctorsAndPatientsByMonth(
+    doctorsByMonth,
+    patientsByMonth,
+  )
 
   return {
     totalRevenue,
@@ -159,5 +208,6 @@ export const findDashboard = async ({ from, to }: Params) => {
     topDoctors,
     topSpecialties,
     todayAppointments,
+    doctorsAndPatientsByMonth,
   }
 }

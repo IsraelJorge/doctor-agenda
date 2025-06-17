@@ -19,6 +19,7 @@ import { Route } from '@/utils/routes'
 import { appointmentsTableColumns } from '../appointment/_components/table-columns'
 import { AppointmentsChart } from './_components/appointments-chart'
 import { DatePicker } from './_components/date-picker'
+import { PatientDoctorGrowthChart } from './_components/patient-doctor-growth-chart'
 import { StatsCards } from './_components/stats-cards'
 import { TopDoctors } from './_components/top-doctors'
 import TopSpecialties from './_components/top-specialties'
@@ -52,6 +53,7 @@ export default async function DashboardPage({
     topDoctors,
     topSpecialties,
     todayAppointments,
+    doctorsAndPatientsByMonth,
   } = await findDashboard({
     from,
     to,
@@ -78,11 +80,14 @@ export default async function DashboardPage({
           totalPatients={totalPatients.total}
           totalDoctors={totalDoctors.total}
         />
-        <div className="grid grid-cols-[2.25fr_1fr] gap-4">
+        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[2.25fr_2.25fr_2fr]">
           <AppointmentsChart dailyAppointmentsData={dailyAppointmentsData} />
+          <PatientDoctorGrowthChart
+            doctorsAndPatientsByMonth={doctorsAndPatientsByMonth}
+          />
           <TopDoctors doctors={topDoctors} />
         </div>
-        <div className="grid grid-cols-[2.25fr_1fr] gap-4">
+        <div className="flex flex-col-reverse gap-4 lg:grid lg:grid-cols-[2.25fr_1fr]">
           <Card>
             <CardHeader>
               <div className="flex items-center gap-3">

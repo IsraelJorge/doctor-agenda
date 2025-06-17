@@ -61,7 +61,11 @@ export function DataTable<TData, TValue>({
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
-                    data-label={cell.column.columnDef.header}
+                    data-label={
+                      typeof cell.column.columnDef.header === 'string'
+                        ? cell.column.columnDef.header
+                        : undefined
+                    }
                     key={cell.id}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
