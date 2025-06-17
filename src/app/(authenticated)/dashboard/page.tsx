@@ -91,7 +91,7 @@ export default async function DashboardPage({
           <Card>
             <CardHeader>
               <div className="flex items-center gap-3">
-                <Icon name="calendar" className="text-muted-foreground" />
+                <Icon name="calendar" />
 
                 <CardTitle className="text-base">
                   Agendamentos de hoje

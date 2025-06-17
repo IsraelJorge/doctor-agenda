@@ -1,6 +1,6 @@
 @layer base {
   table {
-    @apply w-full;
+    @apply w-full bg-white;
   }
 
   thead {
@@ -16,7 +16,7 @@
   }
 
   th {
-    @apply lg:text-left;
+    @apply bg-accent text-muted-foreground lg:text-left;
   }
 
   td {
