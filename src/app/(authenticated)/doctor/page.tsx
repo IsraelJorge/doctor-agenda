@@ -28,7 +28,7 @@ export default async function DoctorPage() {
       </PageHeader>
 
       <PageContent>
-        <section className="grid grid-cols-4 gap-3">
+        <section className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-3 lg:grid-cols-4">
           {doctors.map((doctor) => (
             <DoctorCard key={doctor.id} doctor={doctor} />
           ))}
