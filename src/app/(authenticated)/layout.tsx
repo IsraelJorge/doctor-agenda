@@ -1,10 +1,11 @@
 import { redirect } from 'next/navigation'
 import { PropsWithChildren } from 'react'
 
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { getUserSession } from '@/lib/auth'
 import { Route } from '@/utils/routes'
 
+import { AppHeader } from './_components/app-header'
 import { AppSidebar } from './_components/app-sidebar'
 
 export default async function AuthenticatedLayout({
@@ -19,10 +20,12 @@ export default async function AuthenticatedLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="@container/main w-full">
-        <SidebarTrigger />
-        {children}
-      </main>
+      <SidebarInset>
+        <main className="@container/main w-full">
+          <AppHeader />
+          {children}
+        </main>
+      </SidebarInset>
     </SidebarProvider>
   )
 }

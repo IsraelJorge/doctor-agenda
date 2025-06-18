@@ -5,7 +5,7 @@ import { SignUpForm } from './_components/sign-up-form'
 
 export default function AuthenticationPage() {
   return (
-    <main className="flex min-h-screen w-screen items-center justify-center bg-white">
+    <main className="dark:bg-background flex min-h-screen w-screen items-center justify-center bg-white">
       <Tabs defaultValue="login" className="w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="login">Login</TabsTrigger>

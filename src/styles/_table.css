@@ -1,6 +1,6 @@
 @layer base {
   table {
-    @apply w-full bg-white;
+    @apply dark:bg-card w-full bg-white;
   }
 
   thead {
