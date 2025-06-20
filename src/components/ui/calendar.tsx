@@ -82,9 +82,12 @@ function Calendar({
           defaultClassNames.caption_label,
         ),
         table: 'w-full border-collapse',
-        weekdays: cn('flex', defaultClassNames.weekdays),
+        weekdays: cn(
+          'flex overflow-hidden rounded-sm',
+          defaultClassNames.weekdays,
+        ),
         weekday: cn(
-          'text-muted-foreground flex-1 rounded-md text-[0.8rem] font-normal select-none',
+          'text-muted-foreground flex flex-1 items-center justify-center text-[0.8rem] font-normal select-none',
           defaultClassNames.weekday,
         ),
         week: cn('mt-2 flex w-full', defaultClassNames.week),
