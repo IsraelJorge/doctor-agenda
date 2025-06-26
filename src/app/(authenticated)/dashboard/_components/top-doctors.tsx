@@ -40,7 +40,8 @@ export function TopDoctors({ doctors }: TopDoctorsProps) {
                         .split(' ')
                         .map((n) => n[0])
                         .join('')
-                        .slice(0, 2)}
+                        .slice(0, 2)
+                        .toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div>

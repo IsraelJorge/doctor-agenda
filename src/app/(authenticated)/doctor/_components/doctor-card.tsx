@@ -45,7 +45,12 @@ export function DoctorCard({ doctor }: DoctorCardProps) {
           <Avatar className="size-10">
             <AvatarImage src={doctor.avatarImageUrl ?? ''} alt={doctor.name} />
             <AvatarFallback>
-              {doctor.name.slice(0, 2).toUpperCase()}
+              {doctor.name
+                .split(' ')
+                .map((n) => n[0])
+                .join('')
+                .slice(0, 2)
+                .toLocaleUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-1">
