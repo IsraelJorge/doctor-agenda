@@ -2,6 +2,7 @@ import '@/styles/globals.css'
 
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
+import NextTopLoader from 'nextjs-toploader'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import { Toaster } from '@/components/ui/sonner'
@@ -27,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={`${manrope.variable} antialiased`}>
+        <NextTopLoader color="var(--primary)" showSpinner={false} />
         <NuqsAdapter>
           <ThemeProvider attribute="class">
             <ReactQueryProvider>{children}</ReactQueryProvider>
