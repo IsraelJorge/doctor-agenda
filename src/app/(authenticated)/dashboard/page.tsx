@@ -1,5 +1,3 @@
-import { redirect } from 'next/navigation'
-
 import { findDashboard } from '@/actions/dashboard/find-dashboard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DataTable } from '@/components/ui/data-table'
@@ -14,7 +12,6 @@ import {
   PageTitle,
 } from '@/components/ui/page-container'
 import { DateHelpers } from '@/helpers/date-helpers'
-import { Route } from '@/utils/routes'
 
 import { appointmentsTableColumns } from '../appointment/_components/table-columns'
 import { AppointmentsChart } from './_components/appointments-chart'
@@ -36,14 +33,6 @@ export default async function DashboardPage({
 }: DashboardPageProps) {
   const { from, to } = await searchParams
 
-  if (!from || !to) {
-    redirect(
-      `${Route.dashboard}?from=${DateHelpers.getInstanceDayjs().format('YYYY-MM-DD')}&to=${DateHelpers.getInstanceDayjs()
-        .add(1, 'month')
-        .format('YYYY-MM-DD')}`,
-    )
-  }
-
   const {
     totalRevenue,
     totalAppointments,
@@ -55,8 +44,9 @@ export default async function DashboardPage({
     todayAppointments,
     doctorsAndPatientsByMonth,
   } = await findDashboard({
-    from,
-    to,
+    from: from ?? DateHelpers.getInstanceDayjs().format('YYYY-MM-DD'),
+    to:
+      to ?? DateHelpers.getInstanceDayjs().add(1, 'month').format('YYYY-MM-DD'),
   })
 
   return (
