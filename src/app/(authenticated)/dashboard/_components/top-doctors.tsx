@@ -1,7 +1,7 @@
-import { Stethoscope } from 'lucide-react'
-
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { EmptyAlert } from '@/components/ui/empty-alert'
+import { Icon } from '@/components/ui/icon'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 
@@ -21,13 +21,19 @@ export function TopDoctors({ doctors }: TopDoctorsProps) {
       <CardContent>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Stethoscope className="text-muted-foreground" />
+            <Icon name="stethoscope" className="text-muted-foreground" />
             <CardTitle className="text-base">Médicos</CardTitle>
           </div>
         </div>
         <Separator className="my-4" />
         <ScrollArea className="h-[230px] @min-[1265px]/main:h-full">
           <div className="space-y-6">
+            {doctors.length === 0 && (
+              <EmptyAlert
+                title="Nenhum médico cadastrado"
+                description="Você ainda não possui médicos cadastrados."
+              />
+            )}
             {doctors.map((doctor) => (
               <div
                 key={doctor.id}

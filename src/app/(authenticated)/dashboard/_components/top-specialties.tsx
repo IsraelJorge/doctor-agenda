@@ -6,11 +6,12 @@ import {
   Eye,
   Hand,
   Heart,
-  Hospital,
   Stethoscope,
 } from 'lucide-react'
 
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { EmptyAlert } from '@/components/ui/empty-alert'
+import { Icon } from '@/components/ui/icon'
 import { Progress } from '@/components/ui/progress'
 
 interface TopSpecialtiesProps {
@@ -51,12 +52,18 @@ export default function TopSpecialties({
       <CardContent>
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Hospital className="text-muted-foreground" />
+            <Icon name="hospital" className="text-muted-foreground" />
             <CardTitle className="text-base">Especialidades</CardTitle>
           </div>
         </div>
 
         <div className="space-y-6">
+          {topSpecialties.length === 0 && (
+            <EmptyAlert
+              title="Nenhuma especialidade encontrada"
+              description="Você ainda não possui médicos cadastrados."
+            />
+          )}
           {topSpecialties.map((specialty) => {
             const Icon = getSpecialtyIcon(specialty.specialty)
             const progressValue =
