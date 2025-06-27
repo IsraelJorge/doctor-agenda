@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
 import { toast } from 'sonner'
 
-import { deleteDoctor } from '@/actions/delete-doctor'
-import { upsertDoctor } from '@/actions/upsert-doctor'
+import { deleteDoctor } from '@/actions/doctor/delete-doctor'
+import { upsertDoctor } from '@/actions/doctor/upsert-doctor'
 import {
   AlertDialog,
   AlertDialogAction,

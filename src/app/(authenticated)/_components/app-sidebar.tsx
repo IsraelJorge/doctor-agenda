@@ -1,5 +1,3 @@
-import Image from 'next/image'
-
 import {
   Sidebar,
   SidebarContent,
@@ -7,11 +5,11 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
 } from '@/components/ui/sidebar'
 import { getUserSession } from '@/lib/auth'
 import { Route } from '@/utils/routes'
 
+import { AppSidebarHeader } from './app-sidebar-header'
 import { AppSidebarManuItem, AppSidebarMenuList } from './app-sidebar-menu-list'
 import { NavUser } from './nav-user'
 
@@ -50,10 +48,8 @@ export async function AppSidebar() {
   const session = await getUserSession()
 
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b p-4">
-        <Image src="/logo.svg" alt="Doutor Agenda" width={136} height={28} />
-      </SidebarHeader>
+    <Sidebar variant="inset">
+      <AppSidebarHeader />
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>

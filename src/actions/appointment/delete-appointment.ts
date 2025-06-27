@@ -3,30 +3,36 @@
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
+import { ErrorUtils } from '@/data/erros'
+import { IdSchema } from '@/data/schemas/shared'
 import { db } from '@/database'
 import { appointmentTable } from '@/database/schemas'
-import { getUserSession } from '@/lib/auth'
 import { actionClient } from '@/lib/safe-action'
-import { z } from '@/lib/zod'
+import { GuardService } from '@/services/guard-service'
 import { Route } from '@/utils/routes'
 
 export const deleteAppointment = actionClient
-  .inputSchema(
-    z.object({
-      id: z.uuid(),
-    }),
-  )
+  .inputSchema(IdSchema)
   .action(async ({ parsedInput }) => {
-    const session = await getUserSession()
-    if (!session) throw new Error('Unauthorized')
+    const session = await GuardService.getValidatedSession({
+      requireClinic: true,
+    })
 
     const appointment = await db.query.appointmentTable.findFirst({
       where: eq(appointmentTable.id, parsedInput.id),
     })
 
-    if (!appointment) throw new Error('Appointment not found')
-    if (appointment.clinicId !== session.user.clinic?.id)
-      throw new Error('Unauthorized')
+    if (!appointment) {
+      return ErrorUtils.notFound({
+        message: 'Appointment not found',
+      })
+    }
+
+    if (appointment.clinicId !== session.user.clinic.id) {
+      return ErrorUtils.unauthorized({
+        message: 'You are not authorized to delete this appointment',
+      })
+    }
 
     await db
       .delete(appointmentTable)

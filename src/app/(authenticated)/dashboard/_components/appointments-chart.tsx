@@ -68,12 +68,9 @@ export const AppointmentsChart = ({
         <DollarSign />
         <CardTitle>Agendamentos e Faturamento</CardTitle>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[200px]">
-          <AreaChart
-            data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-          >
+      <CardContent className="px-2">
+        <ChartContainer config={chartConfig} className="h-full">
+          <AreaChart data={chartData} margin={{ right: 36.8 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="date"

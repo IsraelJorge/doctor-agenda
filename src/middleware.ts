@@ -2,10 +2,8 @@ import { betterFetch } from '@better-fetch/fetch'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-import { auth } from './lib/auth'
+import { Session } from './lib/auth/types'
 import { Route } from './utils/routes'
-
-type Session = Awaited<ReturnType<(typeof auth)['api']['getSession']>>
 
 export async function middleware(request: NextRequest) {
   const { data: session } = await betterFetch<Session>(

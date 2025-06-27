@@ -1,4 +1,5 @@
-import { findDoctor } from '@/actions/find-doctor'
+import { findDoctor } from '@/actions/doctor/find-doctor'
+import { EmptyMessage } from '@/components/ui/empty-message'
 import {
   PageActions,
   PageContainer,
@@ -15,6 +16,8 @@ import { DoctorCard } from './_components/doctor-card'
 export default async function DoctorPage() {
   const doctors = await findDoctor()
 
+  const isEmpty = (doctors?.length ?? 0) === 0
+
   return (
     <PageContainer>
       <PageHeader>
@@ -28,11 +31,19 @@ export default async function DoctorPage() {
       </PageHeader>
 
       <PageContent>
-        <section className="grid grid-cols-4 gap-3">
-          {doctors.map((doctor) => (
-            <DoctorCard key={doctor.id} doctor={doctor} />
-          ))}
-        </section>
+        {isEmpty ? (
+          <EmptyMessage
+            iconName="stethoscope"
+            title="Nenhum médico cadastrado"
+            description="Você ainda não possui médicos cadastrados."
+          />
+        ) : (
+          <section className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-3 lg:grid-cols-4">
+            {doctors.map((doctor) => (
+              <DoctorCard key={doctor.id} doctor={doctor} />
+            ))}
+          </section>
+        )}
       </PageContent>
     </PageContainer>
   )

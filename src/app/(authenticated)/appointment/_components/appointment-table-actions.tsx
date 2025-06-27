@@ -4,7 +4,7 @@ import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-import { deleteAppointment } from '@/actions/delete-appointment'
+import { deleteAppointment } from '@/actions/appointment/delete-appointment'
 import {
   AlertDialog,
   AlertDialogAction,

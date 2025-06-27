@@ -13,12 +13,12 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 p-6">
+    <div className="flex min-h-screen flex-col items-center justify-center p-6">
       <div className="mb-8 w-full max-w-3xl text-center">
-        <h1 className="mb-4 text-3xl font-bold text-gray-900">
+        <h1 className="text-foreground mb-4 text-3xl font-bold">
           Desbloqueie todo o potencial da sua clínica
         </h1>
-        <p className="mb-6 text-xl text-gray-600">
+        <p className="text-muted-foreground mb-6 text-xl">
           Para continuar utilizando nossa plataforma e transformar a gestão do
           seu consultório, é necessário escolher um plano que se adapte às suas
           necessidades.
@@ -41,7 +41,7 @@ export default async function Home() {
       </div>
 
       <div className="mt-8 max-w-lg text-center">
-        <p className="text-sm text-gray-500">
+        <p className="text-muted-foreground text-sm">
           Junte-se a mais de 2.000 profissionais de saúde que já transformaram
           sua rotina com nossa solução. Garantia de satisfação de 30 dias ou seu
           dinheiro de volta.

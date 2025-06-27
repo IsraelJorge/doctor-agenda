@@ -3,12 +3,10 @@
 import { ClinicForm } from '@/data/schemas/clinic'
 import { db } from '@/database'
 import { clinicTable, usersToClinicsTable } from '@/database/schemas'
-import { getUserSession } from '@/lib/auth'
+import { GuardService } from '@/services/guard-service'
 
 export const createClinic = async (data: ClinicForm) => {
-  const session = await getUserSession()
-
-  if (!session) throw new Error('Unauthorized')
+  const session = await GuardService.getValidatedSession()
 
   const [clinic] = await db
     .insert(clinicTable)

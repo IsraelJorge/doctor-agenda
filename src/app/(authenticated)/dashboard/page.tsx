@@ -1,6 +1,4 @@
-import { redirect } from 'next/navigation'
-
-import { findDashboard } from '@/actions/find-dashboard'
+import { findDashboard } from '@/actions/dashboard/find-dashboard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DataTable } from '@/components/ui/data-table'
 import { Icon } from '@/components/ui/icon'
@@ -14,11 +12,11 @@ import {
   PageTitle,
 } from '@/components/ui/page-container'
 import { DateHelpers } from '@/helpers/date-helpers'
-import { Route } from '@/utils/routes'
 
 import { appointmentsTableColumns } from '../appointment/_components/table-columns'
 import { AppointmentsChart } from './_components/appointments-chart'
 import { DatePicker } from './_components/date-picker'
+import { PatientDoctorGrowthChart } from './_components/patient-doctor-growth-chart'
 import { StatsCards } from './_components/stats-cards'
 import { TopDoctors } from './_components/top-doctors'
 import TopSpecialties from './_components/top-specialties'
@@ -35,14 +33,6 @@ export default async function DashboardPage({
 }: DashboardPageProps) {
   const { from, to } = await searchParams
 
-  if (!from || !to) {
-    redirect(
-      `${Route.dashboard}?from=${DateHelpers.getInstanceDayjs().format('YYYY-MM-DD')}&to=${DateHelpers.getInstanceDayjs()
-        .add(1, 'month')
-        .format('YYYY-MM-DD')}`,
-    )
-  }
-
   const {
     totalRevenue,
     totalAppointments,
@@ -52,9 +42,11 @@ export default async function DashboardPage({
     topDoctors,
     topSpecialties,
     todayAppointments,
+    doctorsAndPatientsByMonth,
   } = await findDashboard({
-    from,
-    to,
+    from: from ?? DateHelpers.getInstanceDayjs().format('YYYY-MM-DD'),
+    to:
+      to ?? DateHelpers.getInstanceDayjs().add(1, 'month').format('YYYY-MM-DD'),
   })
 
   return (
@@ -78,15 +70,18 @@ export default async function DashboardPage({
           totalPatients={totalPatients.total}
           totalDoctors={totalDoctors.total}
         />
-        <div className="grid grid-cols-[2.25fr_1fr] gap-4">
+        <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[2.25fr_2.25fr_2fr]">
           <AppointmentsChart dailyAppointmentsData={dailyAppointmentsData} />
+          <PatientDoctorGrowthChart
+            doctorsAndPatientsByMonth={doctorsAndPatientsByMonth}
+          />
           <TopDoctors doctors={topDoctors} />
         </div>
-        <div className="grid grid-cols-[2.25fr_1fr] gap-4">
+        <div className="flex flex-col-reverse gap-4 lg:grid lg:grid-cols-[2.25fr_1fr]">
           <Card>
             <CardHeader>
               <div className="flex items-center gap-3">
-                <Icon name="calendar" className="text-muted-foreground" />
+                <Icon name="calendar" />
 
                 <CardTitle className="text-base">
                   Agendamentos de hoje

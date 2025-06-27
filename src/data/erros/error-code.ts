@@ -1,0 +1,7 @@
+export type ErrorCode =
+  | 'UNAUTHORIZED'
+  | 'FORBIDDEN'
+  | 'NOT_FOUND'
+  | 'VALIDATION_ERROR'
+  | 'INTERNAL_SERVER_ERROR'
+  | 'CLINIC_REQUIRED'

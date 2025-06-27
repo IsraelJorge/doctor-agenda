@@ -6,7 +6,9 @@ export function PageContainer({ children }: PropsWithChildren) {
 
 export const PageHeader = ({ children }: PropsWithChildren) => {
   return (
-    <header className="flex items-center justify-between">{children}</header>
+    <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      {children}
+    </header>
   )
 }
 

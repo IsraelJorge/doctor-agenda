@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
 import { toast } from 'sonner'
 
-import { upsertAppointment } from '@/actions/upsert-appointment'
+import { upsertAppointment } from '@/actions/appointment/upsert-appointment'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {

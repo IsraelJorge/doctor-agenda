@@ -2,10 +2,12 @@ import '@/styles/globals.css'
 
 import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
+import NextTopLoader from 'nextjs-toploader'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import { Toaster } from '@/components/ui/sonner'
 import { ReactQueryProvider } from '@/providers/react-query'
+import { ThemeProvider } from '@/providers/theme-provider'
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -24,10 +26,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={`${manrope.variable} antialiased`}>
+        <NextTopLoader color="var(--primary)" showSpinner={false} />
         <NuqsAdapter>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
+          <ThemeProvider attribute="class">
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+          </ThemeProvider>
         </NuqsAdapter>
         <Toaster richColors position="top-right" theme="light" />
       </body>

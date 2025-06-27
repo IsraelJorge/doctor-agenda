@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
-import { findAvailableTimes } from '@/actions/find-available-times'
+import { findAvailableTimes } from '@/actions/appointment/find-available-times'
 import { DateHelpers } from '@/helpers/date-helpers'
 
 type AvailableTimes = Awaited<ReturnType<typeof findAvailableTimes>>

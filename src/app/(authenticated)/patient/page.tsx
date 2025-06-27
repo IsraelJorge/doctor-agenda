@@ -1,4 +1,4 @@
-import { findPatient } from '@/actions/find-patient'
+import { findPatient } from '@/actions/patient/find-patient'
 import { DataTable } from '@/components/ui/data-table'
 import {
   PageActions,
