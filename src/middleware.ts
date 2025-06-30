@@ -6,12 +6,12 @@ import { Session } from './lib/auth/types'
 import { Route } from './utils/routes'
 
 export async function middleware(request: NextRequest) {
-  console.log({ nextUrl: request.nextUrl.origin })
+  const baseURL = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin
 
   const { data: session } = await betterFetch<Session>(
     '/api/auth/get-session',
     {
-      baseURL: request.nextUrl.origin,
+      baseURL,
       headers: {
         cookie: request.headers.get('cookie') || '',
       },
