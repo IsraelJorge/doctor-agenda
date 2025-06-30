@@ -6,6 +6,8 @@ import { Session } from './lib/auth/types'
 import { Route } from './utils/routes'
 
 export async function middleware(request: NextRequest) {
+  console.log({ nextUrl: request.nextUrl.origin })
+
   const { data: session } = await betterFetch<Session>(
     '/api/auth/get-session',
     {
