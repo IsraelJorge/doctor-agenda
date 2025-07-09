@@ -41,7 +41,7 @@ export function SignUpForm() {
       return toast.error(error.message)
     }
 
-    router.push(Route.dashboard)
+    router.push(Route.newSubscription)
   }
 
   return (

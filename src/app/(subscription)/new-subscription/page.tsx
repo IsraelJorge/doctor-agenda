@@ -8,7 +8,7 @@ import { SubscriptionPlan } from '../../(authenticated)/subscription/_components
 export default async function Home() {
   const session = await getUserSession()
 
-  if (session?.user.plan) {
+  if (session?.user?.plan) {
     redirect(Route.dashboard)
   }
 

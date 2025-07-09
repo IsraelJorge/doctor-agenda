@@ -30,7 +30,8 @@ export async function middleware(request: NextRequest) {
   const shouldRedirectToClinicForm =
     !session?.user?.clinic?.id &&
     pathname !== Route.clinicForm &&
-    pathname !== Route.authentication
+    pathname !== Route.authentication &&
+    pathname !== Route.newSubscription
 
   if (shouldRedirectToLogin) {
     return NextResponse.redirect(new URL(Route.authentication, request.url))
@@ -48,5 +49,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|favicon.ico|sitemap.xml|robots.txt).*)'],
+  matcher: [
+    '/dashboard/:path*',
+    '/clinic-form/:path*',
+    '/appointment/:path*',
+    '/doctor/:path*',
+    '/patient/:path*',
+    '/subscription/:path*',
+    '/new-subscription/:path*',
+  ],
 }
